@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetGains Preise | Transparente Pakete</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #020617; /* Even darker base for contrast */
+            overflow-x: hidden;
+            color: #ffffff;
+        }
+
+        /* --- Background Animation Blobs --- */
+        .blob {
+            position: fixed;
+            filter: blur(100px); /* Weicherer Blur für den Hintergrund */
+            z-index: -1;
+            opacity: 0.6; 
+            animation: float 10s infinite alternate ease-in-out;
+        }
+        
+        .blob-1 {
+            top: -20%;
+            left: -20%;
+            width: 700px;
+            height: 700px;
+            background: #4f46e5;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            animation-delay: 0s;
+        }
+        
+        .blob-2 {
+            bottom: -20%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: #06b6d4;
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            animation-delay: -2s;
+        }
+
+        .blob-3 {
+            top: 30%;
+            left: 30%;
+            width: 500px;
+            height: 500px;
+            background: #db2777; /* Dunkleres Pink */
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation-delay: -4s;
+            opacity: 0.4;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(30px, 50px) rotate(10deg); }
+        }
+
+        /* --- PREMIUM FROSTED GLASS EFFECT --- */
+        .glass-panel {
+            position: relative;
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(50px) saturate(200%) brightness(110%);
+            -webkit-backdrop-filter: blur(50px) saturate(200%) brightness(110%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.3), 
+                inset 0 0 20px 0 rgba(255, 255, 255, 0.02),
+                0 25px 50px -12px rgba(0, 0, 0, 0.6);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            overflow: hidden; 
+        }
+
+        /* NOISE TEXTURE */
+        .glass-panel::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0.06;
+            pointer-events: none;
+            z-index: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Reflektions-Verlauf (Shine) */
+        .glass-panel::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(
+                125deg, 
+                rgba(255,255,255,0.15) 0%, 
+                rgba(255,255,255,0.01) 30%, 
+                rgba(255,255,255,0.00) 100%
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .glass-panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.4),
+                0 35px 60px -15px rgba(0, 0, 0, 0.7);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .glass-panel > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* --- Glass Button --- */
+        .glass-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
+                0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .glass-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.3),
+                0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        .glass-input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.2);
+        }
+        
+        .glass-input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.3);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #020617; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155; 
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8 selection:bg-cyan-500 selection:text-white">
+
+    <!-- Ambient Background -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <!-- Main Content Container (Erweitert für 4 Spalten) -->
+    <main class="w-full max-w-7xl space-y-6 z-10">
+
+        <!-- 1. MAIN IDENTITY CARD -->
+        <div class="glass-panel rounded-[2.5rem] p-8 md:p-10 flex flex-col md:flex-row items-center gap-8 text-center md:text-left relative group">
+            
+            <div class="relative shrink-0">
+                <div class="w-32 h-32 md:w-40 md:h-40 rounded-full p-1 bg-gradient-to-tr from-cyan-400 to-indigo-500 shadow-lg shadow-indigo-500/20">
+                    <!-- Netgains Logo Placeholder -->
+                    <div class="w-full h-full rounded-full bg-slate-800/80 backdrop-blur-sm border-2 border-white/10 flex items-center justify-center text-slate-300 text-5xl md:text-6xl shadow-inner">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                </div>
+                <div class="absolute bottom-2 right-2 w-5 h-5 bg-emerald-500 rounded-full border-4 border-[#0f172a] shadow-lg shadow-emerald-500/30" title="Aufnahmebereit"></div>
+            </div>
+
+            <div class="flex-1">
+                <div class="inline-block px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-bold tracking-wide uppercase mb-3 shadow-[0_0_15px_rgba(6,182,212,0.15)]">
+                    Growth & Performance
+                </div>
+                <!-- Titel Aktualisiert -->
+                <h1 class="text-3xl md:text-4xl font-bold text-white mb-2 tracking-tight drop-shadow-md">NetGains Preise</h1>
+                <p class="text-slate-200 text-sm md:text-base leading-relaxed mb-6 font-medium max-w-2xl">
+                    Maximale Transparenz für maximales Wachstum. Wählen Sie das Paket, das zu Ihren Unternehmenszielen passt, und vergleichen Sie die Features direkt.
+                </p>
+                
+                <div class="flex flex-wrap justify-center md:justify-start gap-3">
+                    <a href="#pakete" class="glass-btn px-6 py-2.5 rounded-full text-sm font-semibold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-down"></i>
+                        Preise vergleichen
+                    </a>
+                    <a href="#kontakt" class="glass-btn px-4 py-2.5 rounded-full text-sm font-semibold text-white/80 hover:text-white transition-colors" title="Direkt Anfragen">
+                        <i class="fa-solid fa-comment-dots"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. STATUS / INFO BAR -->
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div class="glass-panel rounded-3xl p-4 text-center hover:bg-white/5 transition-colors cursor-default">
+                <div class="text-cyan-400 text-lg mb-1 drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]"><i class="fa-solid fa-rocket"></i></div>
+                <div class="text-xs text-slate-300 uppercase font-bold tracking-wider">Setup</div>
+                <div class="text-sm font-semibold text-white mt-1">in 48 Stunden</div>
+            </div>
+            <div class="glass-panel rounded-3xl p-4 text-center hover:bg-white/5 transition-colors cursor-default">
+                <div class="text-indigo-400 text-lg mb-1 drop-shadow-[0_0_8px_rgba(129,140,248,0.5)]"><i class="fa-solid fa-check-double"></i></div>
+                <div class="text-xs text-slate-300 uppercase font-bold tracking-wider">Qualität</div>
+                <div class="text-sm font-semibold text-white mt-1">Premium Standard</div>
+            </div>
+            <div class="glass-panel rounded-3xl p-4 text-center hover:bg-white/5 transition-colors cursor-default col-span-2 md:col-span-1">
+                <div class="text-pink-400 text-lg mb-1 drop-shadow-[0_0_8px_rgba(244,114,182,0.5)]"><i class="fa-solid fa-headset"></i></div>
+                <div class="text-xs text-slate-300 uppercase font-bold tracking-wider">Support</div>
+                <div class="text-sm font-semibold text-white mt-1">Persönlich & Direkt</div>
+            </div>
+        </div>
+
+        <!-- 3. PRICING GRID (Update: 4 Spalten auf Large Screens) -->
+        <div id="pakete" class="glass-panel rounded-[2.5rem] p-8">
+            <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                <span class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-sm border border-white/10"><i class="fa-solid fa-tags"></i></span>
+                Unsere Modelle im Vergleich
+            </h2>
+            
+            <!-- Grid System aktualisiert: lg:grid-cols-4 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <!-- Plan 1: Starter -->
+                <div class="group p-5 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer hover:-translate-y-1 shadow-lg shadow-black/5 hover:shadow-black/20 flex flex-col justify-between h-full">
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="p-2 bg-indigo-500/20 rounded-lg text-indigo-300 group-hover:text-indigo-200 transition-colors border border-indigo-500/10">
+                                <i class="fa-solid fa-seedling"></i>
+                            </div>
+                            <span class="text-xs font-bold text-indigo-300 bg-indigo-500/10 px-2 py-1 rounded">START</span>
+                        </div>
+                        <h3 class="font-bold text-white text-lg mb-1">Starter</h3>
+                        <div class="text-2xl font-bold text-cyan-400 mb-2">499€ <span class="text-xs text-slate-400 font-normal">/Monat</span></div>
+                        <ul class="text-xs text-slate-300 space-y-3 mt-4 font-medium">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Basis Strategie</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Monthly Reporting</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> E-Mail Support</li>
+                            <li class="flex items-center gap-2 text-slate-500"><i class="fa-solid fa-minus text-[10px]"></i> <span class="line-through decoration-slate-600">Advanced Tracking</span></li>
+                            <li class="flex items-center gap-2 text-slate-500"><i class="fa-solid fa-minus text-[10px]"></i> <span class="line-through decoration-slate-600">Weekly Calls</span></li>
+                        </ul>
+                    </div>
+                    <button class="mt-6 w-full py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-xs font-bold text-white transition-colors">Wählen</button>
+                </div>
+
+                <!-- Plan 2: Growth -->
+                <div class="group p-5 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-cyan-500/30 hover:bg-white/15 hover:border-cyan-400/50 transition-all duration-300 cursor-pointer hover:-translate-y-1 shadow-lg shadow-cyan-500/10 hover:shadow-cyan-500/20 flex flex-col justify-between h-full relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-cyan-500 text-[10px] font-bold text-black px-2 py-1 rounded-bl-lg">POPULÄR</div>
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="p-2 bg-cyan-500/20 rounded-lg text-cyan-300 group-hover:text-cyan-200 transition-colors border border-cyan-500/10">
+                                <i class="fa-solid fa-arrow-trend-up"></i>
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-white text-lg mb-1">Growth</h3>
+                        <div class="text-2xl font-bold text-cyan-400 mb-2">999€ <span class="text-xs text-slate-400 font-normal">/Monat</span></div>
+                        <ul class="text-xs text-slate-300 space-y-3 mt-4 font-medium">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> <strong>Advanced Tracking</strong></li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Monthly Reporting</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> <strong>Weekly Calls</strong></li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Priority Support</li>
+                            <li class="flex items-center gap-2 text-slate-500"><i class="fa-solid fa-minus text-[10px]"></i> <span class="line-through decoration-slate-600">Slack Access</span></li>
+                        </ul>
+                    </div>
+                    <button class="mt-6 w-full py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-xs font-bold text-white transition-colors shadow-lg shadow-cyan-500/25">Wählen</button>
+                </div>
+
+                <!-- Plan 3: Pro -->
+                <div class="group p-5 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer hover:-translate-y-1 shadow-lg shadow-black/5 hover:shadow-black/20 flex flex-col justify-between h-full">
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="p-2 bg-pink-500/20 rounded-lg text-pink-300 group-hover:text-pink-200 transition-colors border border-pink-500/10">
+                                <i class="fa-solid fa-crown"></i>
+                            </div>
+                            <span class="text-xs font-bold text-pink-300 bg-pink-500/10 px-2 py-1 rounded">PRO</span>
+                        </div>
+                        <h3 class="font-bold text-white text-lg mb-1">Scaling</h3>
+                        <div class="text-2xl font-bold text-cyan-400 mb-2">1.999€ <span class="text-xs text-slate-400 font-normal">/Monat</span></div>
+                        <ul class="text-xs text-slate-300 space-y-3 mt-4 font-medium">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Full Funnel Design</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> A/B Testing Suite</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Weekly Calls</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> <strong>Slack Access</strong></li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> 24/7 Priority</li>
+                        </ul>
+                    </div>
+                    <button class="mt-6 w-full py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-xs font-bold text-white transition-colors">Wählen</button>
+                </div>
+
+                <!-- Plan 4: Enterprise -->
+                <div class="group p-5 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer hover:-translate-y-1 shadow-lg shadow-black/5 hover:shadow-black/20 flex flex-col justify-between h-full">
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="p-2 bg-emerald-500/20 rounded-lg text-emerald-300 group-hover:text-emerald-200 transition-colors border border-emerald-500/10">
+                                <i class="fa-solid fa-building-columns"></i>
+                            </div>
+                            <span class="text-xs font-bold text-emerald-300 bg-emerald-500/10 px-2 py-1 rounded">CORP</span>
+                        </div>
+                        <h3 class="font-bold text-white text-lg mb-1">Enterprise</h3>
+                        <div class="text-2xl font-bold text-white/80 mb-2">Individuell</div>
+                        <ul class="text-xs text-slate-300 space-y-3 mt-4 font-medium">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Maßgeschneidert</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Dedicated Team</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Custom Reporting</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> SLA Verträge</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> On-Site Meetings</li>
+                        </ul>
+                    </div>
+                    <button class="mt-6 w-full py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-xs font-bold text-white transition-colors">Kontaktieren</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. CONTACT SECTION -->
+        <div id="kontakt" class="glass-panel rounded-[2.5rem] p-8 md:p-10 max-w-3xl mx-auto">
+            <h2 class="text-xl font-bold text-white mb-6 text-center">Jetzt Angebot sichern</h2>
+            
+            <form onsubmit="event.preventDefault(); alert('Vielen Dank für Ihr Interesse an Netgains! Ihre Anfrage wurde simuliert.');" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-slate-300 ml-2 tracking-wide uppercase">Ihr Name</label>
+                        <input type="text" placeholder="Vorname Nachname" class="w-full px-4 py-3 rounded-xl glass-input placeholder-slate-400 focus:ring-2 focus:ring-cyan-500/50 transition-all font-medium">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-slate-300 ml-2 tracking-wide uppercase">E-Mail Adresse</label>
+                        <input type="email" placeholder="name@firma.de" class="w-full px-4 py-3 rounded-xl glass-input placeholder-slate-400 focus:ring-2 focus:ring-cyan-500/50 transition-all font-medium">
+                    </div>
+                </div>
+                
+                <div class="space-y-1">
+                    <label class="text-xs font-bold text-slate-300 ml-2 tracking-wide uppercase">Paket-Auswahl</label>
+                    <select class="w-full px-4 py-3 rounded-xl glass-input text-white focus:ring-2 focus:ring-cyan-500/50 transition-all font-medium appearance-none cursor-pointer">
+                        <option class="text-black" value="" disabled selected>Bitte wählen...</option>
+                        <option class="text-black" value="starter">Starter (499€)</option>
+                        <option class="text-black" value="growth">Growth (999€)</option>
+                        <option class="text-black" value="scaling">Scaling (1.999€)</option>
+                        <option class="text-black" value="enterprise">Enterprise (Individuell)</option>
+                    </select>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-xs font-bold text-slate-300 ml-2 tracking-wide uppercase">Nachricht (Optional)</label>
+                    <textarea rows="3" placeholder="Haben Sie spezielle Anforderungen?" class="w-full px-4 py-3 rounded-xl glass-input placeholder-slate-400 focus:ring-2 focus:ring-cyan-500/50 transition-all resize-none font-medium"></textarea>
+                </div>
+
+                <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white font-bold shadow-lg shadow-indigo-500/30 transition-all transform hover:scale-[1.02] border border-white/10 relative overflow-hidden group">
+                    <span class="relative z-10 flex justify-center items-center gap-2">
+                        Anfrage absenden <i class="fa-solid fa-paper-plane group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                    <div class="absolute inset-0 bg-white/20 blur-md opacity-0 hover:opacity-100 transition-opacity"></div>
+                </button>
+            </form>
+
+            <div class="mt-8 pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between text-xs text-slate-400 gap-4 font-medium">
+                <p>&copy; 2024 Netgains Digital</p>
+                <div class="flex gap-4">
+                    <a href="#" class="hover:text-white transition-colors">Impressum</a>
+                    <a href="#" class="hover:text-white transition-colors">AGB</a>
+                    <a href="#" class="hover:text-white transition-colors">Datenschutz</a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</body>
+</html>
