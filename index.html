@@ -27,46 +27,74 @@
         /* --- Background Animation Blobs --- */
         .blob {
             position: fixed;
-            filter: blur(100px); /* Weicherer Blur für den Hintergrund */
+            filter: blur(80px); /* Etwas weniger Blur für mehr Struktur */
             z-index: -1;
-            opacity: 0.6; 
-            animation: float 10s infinite alternate ease-in-out;
+            opacity: 0.5; /* Global etwas dunkler */
+            will-change: transform, border-radius;
+            animation: move-gradient 20s infinite alternate ease-in-out;
         }
         
         .blob-1 {
-            top: -20%;
-            left: -20%;
+            top: -10%;
+            left: -10%;
             width: 700px;
             height: 700px;
-            background: #4f46e5;
+            background: #4f46e5; /* Indigo */
             border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
             animation-delay: 0s;
         }
         
         .blob-2 {
-            bottom: -20%;
-            right: -20%;
+            bottom: -10%;
+            right: -10%;
             width: 800px;
             height: 800px;
-            background: #06b6d4;
+            background: #0f766e; /* Dunkleres Türkis (Teal-700) */
             border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-            animation-delay: -2s;
+            animation-delay: -5s;
         }
 
         .blob-3 {
-            top: 30%;
-            left: 30%;
+            top: 40%;
+            left: 20%;
             width: 500px;
             height: 500px;
-            background: #db2777; /* Dunkleres Pink */
+            background: #db2777; /* Pink */
             border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-            animation-delay: -4s;
-            opacity: 0.4;
+            animation-delay: -10s;
+            opacity: 0.3; /* Mitte/Pinker Blob deutlich dunkler */
         }
 
-        @keyframes float {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            100% { transform: translate(30px, 50px) rotate(10deg); }
+        /* Dark Center Overlay - Macht die Mitte dunkler */
+        .dark-center-overlay {
+            position: fixed;
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            z-index: -1; /* Über den Blobs, unter dem Content */
+            background: radial-gradient(circle at center, rgba(2, 6, 23, 0.85) 0%, rgba(2, 6, 23, 0.1) 70%);
+            pointer-events: none;
+        }
+
+        /* Complex Organic Animation */
+        @keyframes move-gradient {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            }
+            33% {
+                transform: translate(50px, -30px) rotate(10deg) scale(1.1);
+                border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%;
+            }
+            66% {
+                transform: translate(-30px, 50px) rotate(-5deg) scale(0.95);
+                border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%;
+            }
+            100% {
+                transform: translate(20px, 20px) rotate(5deg) scale(1.05);
+                border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            }
         }
 
         /* --- PREMIUM FROSTED GLASS EFFECT --- */
@@ -168,16 +196,27 @@
             background: #334155; 
             border-radius: 4px;
         }
+
+        /* Table Specifics */
+        .glass-table th {
+            vertical-align: bottom;
+        }
+        .glass-table td {
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8 selection:bg-cyan-500 selection:text-white">
 
-    <!-- Ambient Background -->
+    <!-- Ambient Background Blobs -->
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
     <div class="blob blob-3"></div>
+    
+    <!-- Darker Center Overlay -->
+    <div class="dark-center-overlay"></div>
 
-    <!-- Main Content Container (Erweitert für 4 Spalten) -->
+    <!-- Main Content Container -->
     <main class="w-full max-w-7xl space-y-6 z-10">
 
         <!-- 1. MAIN IDENTITY CARD -->
@@ -195,12 +234,11 @@
 
             <div class="flex-1">
                 <div class="inline-block px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-bold tracking-wide uppercase mb-3 shadow-[0_0_15px_rgba(6,182,212,0.15)]">
-                    Growth & Performance
+                    Business Solutions
                 </div>
-                <!-- Titel Aktualisiert -->
                 <h1 class="text-3xl md:text-4xl font-bold text-white mb-2 tracking-tight drop-shadow-md">NetGains Preise</h1>
                 <p class="text-slate-200 text-sm md:text-base leading-relaxed mb-6 font-medium max-w-2xl">
-                    Maximale Transparenz für maximales Wachstum. Wählen Sie das Paket, das zu Ihren Unternehmenszielen passt, und vergleichen Sie die Features direkt.
+                    Spezialisierte digitale Lösungen für Unternehmen. Transparente Preise für maximalen Erfolg und nachhaltiges Wachstum.
                 </p>
                 
                 <div class="flex flex-wrap justify-center md:justify-start gap-3">
@@ -234,102 +272,114 @@
             </div>
         </div>
 
-        <!-- 3. PRICING GRID (Update: 4 Spalten auf Large Screens) -->
-        <div id="pakete" class="glass-panel rounded-[2.5rem] p-8">
+        <!-- 3. COMPARISON TABLE -->
+        <div id="pakete" class="glass-panel rounded-[2.5rem] p-6 md:p-8">
             <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
-                <span class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-sm border border-white/10"><i class="fa-solid fa-tags"></i></span>
+                <span class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-sm border border-white/10"><i class="fa-solid fa-table-list"></i></span>
                 Unsere Modelle im Vergleich
             </h2>
             
-            <!-- Grid System aktualisiert: lg:grid-cols-4 -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                
-                <!-- Plan 1: Starter -->
-                <div class="group p-5 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer hover:-translate-y-1 shadow-lg shadow-black/5 hover:shadow-black/20 flex flex-col justify-between h-full">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <div class="p-2 bg-indigo-500/20 rounded-lg text-indigo-300 group-hover:text-indigo-200 transition-colors border border-indigo-500/10">
-                                <i class="fa-solid fa-seedling"></i>
-                            </div>
-                            <span class="text-xs font-bold text-indigo-300 bg-indigo-500/10 px-2 py-1 rounded">START</span>
-                        </div>
-                        <h3 class="font-bold text-white text-lg mb-1">Starter</h3>
-                        <div class="text-2xl font-bold text-cyan-400 mb-2">499€ <span class="text-xs text-slate-400 font-normal">/Monat</span></div>
-                        <ul class="text-xs text-slate-300 space-y-3 mt-4 font-medium">
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Basis Strategie</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Monthly Reporting</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> E-Mail Support</li>
-                            <li class="flex items-center gap-2 text-slate-500"><i class="fa-solid fa-minus text-[10px]"></i> <span class="line-through decoration-slate-600">Advanced Tracking</span></li>
-                            <li class="flex items-center gap-2 text-slate-500"><i class="fa-solid fa-minus text-[10px]"></i> <span class="line-through decoration-slate-600">Weekly Calls</span></li>
-                        </ul>
-                    </div>
-                    <button class="mt-6 w-full py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-xs font-bold text-white transition-colors">Wählen</button>
-                </div>
-
-                <!-- Plan 2: Growth -->
-                <div class="group p-5 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-cyan-500/30 hover:bg-white/15 hover:border-cyan-400/50 transition-all duration-300 cursor-pointer hover:-translate-y-1 shadow-lg shadow-cyan-500/10 hover:shadow-cyan-500/20 flex flex-col justify-between h-full relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-cyan-500 text-[10px] font-bold text-black px-2 py-1 rounded-bl-lg">POPULÄR</div>
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <div class="p-2 bg-cyan-500/20 rounded-lg text-cyan-300 group-hover:text-cyan-200 transition-colors border border-cyan-500/10">
-                                <i class="fa-solid fa-arrow-trend-up"></i>
-                            </div>
-                        </div>
-                        <h3 class="font-bold text-white text-lg mb-1">Growth</h3>
-                        <div class="text-2xl font-bold text-cyan-400 mb-2">999€ <span class="text-xs text-slate-400 font-normal">/Monat</span></div>
-                        <ul class="text-xs text-slate-300 space-y-3 mt-4 font-medium">
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> <strong>Advanced Tracking</strong></li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Monthly Reporting</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> <strong>Weekly Calls</strong></li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Priority Support</li>
-                            <li class="flex items-center gap-2 text-slate-500"><i class="fa-solid fa-minus text-[10px]"></i> <span class="line-through decoration-slate-600">Slack Access</span></li>
-                        </ul>
-                    </div>
-                    <button class="mt-6 w-full py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-xs font-bold text-white transition-colors shadow-lg shadow-cyan-500/25">Wählen</button>
-                </div>
-
-                <!-- Plan 3: Pro -->
-                <div class="group p-5 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer hover:-translate-y-1 shadow-lg shadow-black/5 hover:shadow-black/20 flex flex-col justify-between h-full">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <div class="p-2 bg-pink-500/20 rounded-lg text-pink-300 group-hover:text-pink-200 transition-colors border border-pink-500/10">
-                                <i class="fa-solid fa-crown"></i>
-                            </div>
-                            <span class="text-xs font-bold text-pink-300 bg-pink-500/10 px-2 py-1 rounded">PRO</span>
-                        </div>
-                        <h3 class="font-bold text-white text-lg mb-1">Scaling</h3>
-                        <div class="text-2xl font-bold text-cyan-400 mb-2">1.999€ <span class="text-xs text-slate-400 font-normal">/Monat</span></div>
-                        <ul class="text-xs text-slate-300 space-y-3 mt-4 font-medium">
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Full Funnel Design</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> A/B Testing Suite</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Weekly Calls</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> <strong>Slack Access</strong></li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> 24/7 Priority</li>
-                        </ul>
-                    </div>
-                    <button class="mt-6 w-full py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-xs font-bold text-white transition-colors">Wählen</button>
-                </div>
-
-                <!-- Plan 4: Enterprise -->
-                <div class="group p-5 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer hover:-translate-y-1 shadow-lg shadow-black/5 hover:shadow-black/20 flex flex-col justify-between h-full">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <div class="p-2 bg-emerald-500/20 rounded-lg text-emerald-300 group-hover:text-emerald-200 transition-colors border border-emerald-500/10">
-                                <i class="fa-solid fa-building-columns"></i>
-                            </div>
-                            <span class="text-xs font-bold text-emerald-300 bg-emerald-500/10 px-2 py-1 rounded">CORP</span>
-                        </div>
-                        <h3 class="font-bold text-white text-lg mb-1">Enterprise</h3>
-                        <div class="text-2xl font-bold text-white/80 mb-2">Individuell</div>
-                        <ul class="text-xs text-slate-300 space-y-3 mt-4 font-medium">
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Maßgeschneidert</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Dedicated Team</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> Custom Reporting</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> SLA Verträge</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> On-Site Meetings</li>
-                        </ul>
-                    </div>
-                    <button class="mt-6 w-full py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-xs font-bold text-white transition-colors">Kontaktieren</button>
+            <div class="overflow-hidden rounded-2xl border border-white/10">
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left text-base text-slate-300 glass-table min-w-[800px]">
+                        <thead>
+                            <tr class="border-b border-white/10 bg-white/5">
+                                <th class="p-4 font-bold text-white min-w-[200px]">Feature</th>
+                                <th class="p-4 min-w-[200px] text-center">
+                                    <div class="text-indigo-300 font-bold text-xl mb-1 uppercase tracking-wider">Paket "Start"</div>
+                                    <div class="text-sm font-normal text-slate-400">(Visitenkarte)</div>
+                                </th>
+                                <th class="p-4 min-w-[200px] bg-white/5 relative border-l border-r border-white/5 text-center">
+                                    <div class="absolute top-0 right-0 bg-cyan-600 text-[10px] font-bold text-white px-2 py-1 rounded-bl-lg shadow-lg">POPULÄR</div>
+                                    <div class="text-cyan-300 font-bold text-xl mb-1 uppercase tracking-wider">Paket "Bestseller"</div>
+                                    <div class="text-sm font-normal text-slate-400">(Wachstum)</div>
+                                </th>
+                                <th class="p-4 min-w-[200px] text-center">
+                                    <div class="text-emerald-300 font-bold text-xl mb-1 uppercase tracking-wider">Paket "Dominanz"</div>
+                                    <div class="text-sm font-normal text-slate-400">(Marktführer)</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5">
+                            <!-- Einrichtung -->
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 font-semibold text-white">Einrichtung (Einmalig)</td>
+                                <td class="p-4 font-medium text-center">199 €</td>
+                                <td class="p-4 bg-white/5 font-bold text-white border-l border-r border-white/5 text-center">499 €</td>
+                                <td class="p-4 font-bold text-emerald-300 text-center">999 €</td>
+                            </tr>
+                            <!-- Monatlich -->
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 font-semibold text-white">Monatlich (Abo)</td>
+                                <td class="p-4 font-medium text-center">49 €</td>
+                                <td class="p-4 bg-white/5 font-bold text-white border-l border-r border-white/5 text-center">99 €</td>
+                                <td class="p-4 font-bold text-emerald-300 text-center">189 €</td>
+                            </tr>
+                            <!-- Zielgruppe -->
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 font-semibold text-white">Zielgruppe</td>
+                                <td class="p-4 text-sm leading-relaxed text-center">Existenzgründer /<br>Abholer</td>
+                                <td class="p-4 bg-white/5 text-sm leading-relaxed border-l border-r border-white/5 text-center">Lokalhelden<br>(Gastro & Handwerk)</td>
+                                <td class="p-4 text-sm leading-relaxed text-center">Filialen /<br>Premium-Anbieter</td>
+                            </tr>
+                            <!-- Rechtstexte -->
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 font-semibold text-white">Rechtstexte</td>
+                                <td class="p-4 text-sm text-center"><i class="fa-solid fa-check text-indigo-400 mr-1"></i> Impressum &<br>Datenschutz</td>
+                                <td class="p-4 bg-white/5 text-sm border-l border-r border-white/5 text-center"><i class="fa-solid fa-check text-cyan-400 mr-1"></i> Impressum &<br>Datenschutz</td>
+                                <td class="p-4 text-sm text-center"><i class="fa-solid fa-check text-emerald-400 mr-1"></i> Impressum &<br>Datenschutz</td>
+                            </tr>
+                            <!-- Barrierefreiheit (BFSG) -->
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 font-semibold text-white">Barrierefreiheit (BFSG)</td>
+                                <td class="p-4 text-slate-500 text-center"><i class="fa-solid fa-xmark text-red-500/50 mr-1"></i> (Nicht zertifiziert)</td>
+                                <td class="p-4 bg-white/5 text-sm border-l border-r border-white/5 text-center"><i class="fa-solid fa-check text-cyan-400 mr-1"></i> Gesetzeskonform<br>(BFSG)</td>
+                                <td class="p-4 text-sm text-center"><i class="fa-solid fa-check text-emerald-400 mr-1"></i> Gesetzeskonform<br>(BFSG)</td>
+                            </tr>
+                            <!-- Digitale Speisekarte -->
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 font-semibold text-white">Digitale Speisekarte<br><span class="text-xs font-normal text-slate-400">(Dienstleistungen)</span></td>
+                                <td class="p-4 text-sm text-center">Einfache Text-Liste</td>
+                                <td class="p-4 bg-white/5 text-sm font-medium text-white border-l border-r border-white/5 text-center">Design-Portfolio<br><span class="text-slate-400 font-normal">(Fotos & Preise)</span></td>
+                                <td class="p-4 text-sm text-center">Premium-Darstellung<br><span class="text-slate-400">(Mehrsprachig / Jobs)</span></td>
+                            </tr>
+                            <!-- QR-Code Marketing -->
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 font-semibold text-white">QR-Code Marketing</td>
+                                <td class="p-4 text-slate-500 text-center"><i class="fa-solid fa-xmark text-red-500/50"></i></td>
+                                <td class="p-4 bg-white/5 border-l border-r border-white/5 text-center"><i class="fa-solid fa-check text-cyan-400 mr-1"></i> Druckdaten inklusive<br><span class="text-xs text-slate-400 block mt-1">(Für Karten oder Auto)</span></td>
+                                <td class="p-4 text-center"><i class="fa-solid fa-check text-emerald-400 mr-1"></i> "Full Service"<br><span class="text-xs text-slate-400 block mt-1">(Wir liefern Aufsteller/Sticker)</span></td>
+                            </tr>
+                            <!-- Google Bewertungsschutz -->
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 font-semibold text-white">Google Bewertungsschutz</td>
+                                <td class="p-4 text-slate-500 text-center"><i class="fa-solid fa-xmark text-red-500/50"></i></td>
+                                <td class="p-4 bg-white/5 border-l border-r border-white/5 text-slate-500 text-center"><i class="fa-solid fa-xmark text-red-500/50"></i></td>
+                                <td class="p-4 text-center"><i class="fa-solid fa-check text-emerald-400 mr-1"></i> Sterne-Filter<br><span class="text-xs text-slate-400">(Mehr 5⭐ Bewertungen)</span></td>
+                            </tr>
+                            <!-- Änderungsservice -->
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 font-semibold text-white">Änderungsservice</td>
+                                <td class="p-4 text-sm text-center">1x pro Jahr</td>
+                                <td class="p-4 bg-white/5 text-sm border-l border-r border-white/5 text-center">Unbegrenzt<br>(Preise / Texte)</td>
+                                <td class="p-4 text-sm font-medium text-emerald-300 text-center">VIP-Priority<br>(WhatsApp Support)</td>
+                            </tr>
+                            <!-- Saisonale Updates -->
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 font-semibold text-white">Saisonale Updates</td>
+                                <td class="p-4 text-sm text-center">Standard</td>
+                                <td class="p-4 bg-white/5 text-sm border-l border-r border-white/5 text-center">Standard</td>
+                                <td class="p-4 text-sm text-center"><i class="fa-solid fa-check text-emerald-400 mr-1"></i> Auto-Kampagnen<br><span class="text-slate-400">(Feiertage etc.)</span></td>
+                            </tr>
+                            <!-- Laufzeit -->
+                            <tr class="hover:bg-white/5 transition-colors border-none">
+                                <td class="p-4 font-semibold text-white">Laufzeit</td>
+                                <td class="p-4 text-slate-300 text-center">24 Monate</td>
+                                <td class="p-4 bg-white/5 text-white font-medium border-l border-r border-white/5 text-center">24 Monate</td>
+                                <td class="p-4 text-emerald-300 font-bold text-center">12 Monate</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -338,7 +388,7 @@
         <div id="kontakt" class="glass-panel rounded-[2.5rem] p-8 md:p-10 max-w-3xl mx-auto">
             <h2 class="text-xl font-bold text-white mb-6 text-center">Jetzt Angebot sichern</h2>
             
-            <form onsubmit="event.preventDefault(); alert('Vielen Dank für Ihr Interesse an Netgains! Ihre Anfrage wurde simuliert.');" class="space-y-4">
+            <form onsubmit="event.preventDefault(); alert('Vielen Dank für Ihre Anfrage! Wir melden uns in Kürze.');" class="space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="space-y-1">
                         <label class="text-xs font-bold text-slate-300 ml-2 tracking-wide uppercase">Ihr Name</label>
@@ -351,13 +401,12 @@
                 </div>
                 
                 <div class="space-y-1">
-                    <label class="text-xs font-bold text-slate-300 ml-2 tracking-wide uppercase">Paket-Auswahl</label>
+                    <label class="text-xs font-bold text-slate-300 ml-2 tracking-wide uppercase">Paket-Interesse</label>
                     <select class="w-full px-4 py-3 rounded-xl glass-input text-white focus:ring-2 focus:ring-cyan-500/50 transition-all font-medium appearance-none cursor-pointer">
                         <option class="text-black" value="" disabled selected>Bitte wählen...</option>
-                        <option class="text-black" value="starter">Starter (499€)</option>
-                        <option class="text-black" value="growth">Growth (999€)</option>
-                        <option class="text-black" value="scaling">Scaling (1.999€)</option>
-                        <option class="text-black" value="enterprise">Enterprise (Individuell)</option>
+                        <option class="text-black" value="start">Paket "Start"</option>
+                        <option class="text-black" value="bestseller">Paket "Bestseller"</option>
+                        <option class="text-black" value="dominanz">Paket "Dominanz"</option>
                     </select>
                 </div>
 
